@@ -14,6 +14,7 @@ function mixc(a, b, t) {
 // Draw into an offscreen canvas and return pixel buckets by channel:
 //   red   → structure (sand/white)
 //   green → light (amber)
+//   blue  → faint texture (dim sand: terrain, dunes)
 // Edge pixels (a filled pixel with an empty neighbour) are kept separately so
 // sampling can favour crisp outlines over flat fills.
 function rasterize(w, h, draw) {
@@ -28,10 +29,15 @@ function rasterize(w, h, draw) {
   const edge = [];
   const fill = [];
   const light = [];
+  const faint = [];
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const k = (y * w + x) * 4;
       if (d[k + 3] <= 100) continue;
+      if (d[k + 2] > d[k] && d[k + 2] > d[k + 1]) {
+        faint.push(x, y);
+        continue;
+      }
       if (d[k + 1] > d[k]) {
         light.push(x, y);
         continue;
@@ -40,7 +46,7 @@ function rasterize(w, h, draw) {
       (isEdge ? edge : fill).push(x, y);
     }
   }
-  return { edge, fill, light };
+  return { edge, fill, light, faint };
 }
 
 function pick(arr) {
@@ -50,18 +56,25 @@ function pick(arr) {
 
 // Map canvas pixels to world space via a box { x0, x1, y0 } (y0 = world y of canvas bottom).
 function sampleCanvas(n, w, h, draw, box, opts = {}) {
-  const { edge, fill, light } = rasterize(w, h, draw);
-  const { edgeShare = 0.5, lightShare = 0.05, depth = 0.08, delay: delayFn } = opts;
+  const { edge, fill, light, faint } = rasterize(w, h, draw);
+  const { edgeShare = 0.5, lightShare = 0.05, faintShare = 0, depth = 0.08, delay: delayFn } = opts;
   const scale = (box.x1 - box.x0) / w;
   const pos = new Float32Array(n * 3);
   const col = new Float32Array(n * 3);
   const delay = new Float32Array(n);
   const nLight = light.length ? Math.round(n * lightShare) : 0;
-  const nEdge = Math.round((n - nLight) * edgeShare);
+  const nFaint = faint.length ? Math.round(n * faintShare) : 0;
+  const nEdge = Math.round((n - nLight - nFaint) * edgeShare);
   for (let i = 0; i < n; i++) {
     let src;
     let c;
-    if (i < nLight) {
+    let kind = 'edge';
+    if (i >= n - nFaint) {
+      kind = 'faint';
+      src = pick(faint);
+      c = SAND.map((v) => v * (0.1 + Math.random() * 0.2));
+    } else if (i < nLight) {
+      kind = 'light';
       src = pick(light);
       c = mixc(AMBER, [1, 0.8, 0.45], Math.random() * 0.5);
       c = c.map((v) => v * (0.9 + Math.random() * 0.4));
@@ -69,6 +82,7 @@ function sampleCanvas(n, w, h, draw, box, opts = {}) {
       src = pick(edge);
       c = mixc(SAND, WHITE, Math.random()).map((v) => v * (0.55 + Math.random() * 0.35));
     } else {
+      kind = 'fill';
       src = pick(fill);
       c = mixc(SAND, WHITE, Math.random() * 0.4).map((v) => v * (0.16 + Math.random() * 0.2));
     }
@@ -80,7 +94,7 @@ function sampleCanvas(n, w, h, draw, box, opts = {}) {
     pos[i * 3 + 1] = y;
     pos[i * 3 + 2] = (Math.random() - 0.5) * depth;
     col.set(c, i * 3);
-    delay[i] = delayFn ? delayFn(src[0] / w, 1 - src[1] / h) : Math.random();
+    delay[i] = delayFn ? delayFn(src[0] / w, 1 - src[1] / h, kind) : Math.random();
   }
   // Shuffle so particle i lands somewhere random in every shape (organic morphs).
   for (let i = n - 1; i > 0; i--) {
@@ -241,4 +255,116 @@ export function ship(n) {
 export function shipPx(x, y) {
   const s = (SHIP_BOX.x1 - SHIP_BOX.x0) / SHIP_CANVAS.w;
   return [SHIP_BOX.x0 + x * s, SHIP_BOX.y0 + (SHIP_CANVAS.h - y) * s];
+}
+
+// ---------------------------------------------------------------------------
+// The Silk Road, abstracted: one caravan route from China (right) to Persia
+// (left), oasis stops, faint dunes and ranges, and a small caravanserai at the
+// western end whose lamps light last. Not a map, just the idea of one.
+// Canvas 1800×500 → world x ∈ [-4.9, 4.9], canvas bottom at y = -2.2.
+export const ROUTE_BOX = { x0: -4.9, x1: 4.9, y0: -2.2 };
+export const ROUTE_CANVAS = { w: 1800, h: 500 };
+export const ROUTE_ENDS = { china: [1680, 250], inn: [170, 300] };
+
+function drawRoute(ctx) {
+  const S = 'rgb(255,0,0)';
+  const L = 'rgb(0,255,0)';
+  const F = 'rgb(0,0,255)';
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Faint terrain: dune lines along the bottom, a mountain range mid-route.
+  ctx.strokeStyle = F;
+  ctx.lineWidth = 2;
+  for (let r = 0; r < 5; r++) {
+    ctx.beginPath();
+    for (let x = 0; x <= 1800; x += 10) {
+      const y = 400 + r * 20 + Math.sin(x * 0.006 + r * 1.7) * 14 + Math.sin(x * 0.017 + r) * 5;
+      x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  const peaks = [
+    [760, 170], [820, 70], [870, 130], [930, 40], [990, 120], [1050, 60], [1110, 150], [1160, 110], [1220, 175],
+  ];
+  peaks.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  ctx.stroke();
+  ctx.beginPath();
+  [[420, 200], [470, 140], [520, 190], [560, 150], [620, 205]].forEach(([x, y], i) =>
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y),
+  );
+  ctx.stroke();
+
+  // The route.
+  ctx.strokeStyle = S;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(1680, 250);
+  ctx.bezierCurveTo(1520, 150, 1330, 360, 1180, 270);
+  ctx.bezierCurveTo(1060, 200, 940, 230, 800, 290);
+  ctx.bezierCurveTo(640, 350, 520, 250, 380, 280);
+  ctx.bezierCurveTo(300, 296, 250, 300, 240, 300);
+  ctx.stroke();
+
+  // Oasis stops.
+  ctx.fillStyle = S;
+  for (const [x, y] of [[1180, 270], [800, 290], [380, 280]]) {
+    ctx.beginPath();
+    ctx.arc(x, y, 9, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // China: a lit city point.
+  ctx.fillStyle = L;
+  ctx.beginPath();
+  ctx.arc(1680, 250, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // The caravanserai: a walled courtyard with corner towers and an arched gate.
+  ctx.fillStyle = S;
+  ctx.fillRect(100, 266, 150, 60);
+  ctx.fillRect(92, 246, 22, 80);
+  ctx.fillRect(236, 246, 22, 80);
+  ctx.beginPath();
+  ctx.moveTo(152, 326);
+  ctx.lineTo(152, 290);
+  ctx.arc(175, 290, 23, Math.PI, 0);
+  ctx.lineTo(198, 326);
+  ctx.closePath();
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+  // Lamp-light in the gate and two windows.
+  ctx.fillStyle = L;
+  ctx.beginPath();
+  ctx.moveTo(158, 326);
+  ctx.lineTo(158, 292);
+  ctx.arc(175, 292, 17, Math.PI, 0);
+  ctx.lineTo(192, 326);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillRect(116, 284, 12, 12);
+  ctx.fillRect(222, 284, 12, 12);
+}
+
+export function route(n) {
+  return sampleCanvas(n, ROUTE_CANVAS.w, ROUTE_CANVAS.h, drawRoute, ROUTE_BOX, {
+    edgeShare: 0.72,
+    lightShare: 0.06,
+    faintShare: 0.42,
+    depth: 0.05,
+    // Draw east → west along the road; the inn and its lamps arrive last.
+    delay: (u, v, kind) => {
+      if (kind === 'faint') return Math.random() * 0.6;
+      if (kind === 'light' && u < 0.2) return 0.94 + Math.random() * 0.06;
+      return Math.min(1, (1 - u) * 0.88 + Math.random() * 0.06);
+    },
+  });
+}
+
+// Canvas px → world coords on the route (for labels that sit on it).
+export function routePx(x, y) {
+  const s = (ROUTE_BOX.x1 - ROUTE_BOX.x0) / ROUTE_CANVAS.w;
+  return [ROUTE_BOX.x0 + x * s, ROUTE_BOX.y0 + (ROUTE_CANVAS.h - y) * s];
 }

@@ -16,6 +16,11 @@ export function px(x, y) {
   return [(x / FRAME.w - 0.5) * WORLD_W, (0.5 - y / FRAME.h) * WORLD_H];
 }
 
+// World coords at z = 0 → stage pixels (inverse of px()).
+export function toPx(x, y) {
+  return [(x / WORLD_W + 0.5) * FRAME.w, (0.5 - y / WORLD_H) * FRAME.h];
+}
+
 export function createStage(canvas, stageEl) {
   const renderer = new THREE.WebGLRenderer({
     canvas,

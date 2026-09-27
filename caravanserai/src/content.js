@@ -47,9 +47,39 @@ export const scenes = [
       },
     ],
   },
-  { id: 'title', name: 'Title / thesis', start: 35, end: 50, steps: [] },
+  {
+    id: 'title',
+    name: 'Title / thesis',
+    start: 35,
+    end: 50,
+    steps: [
+      {
+        t: 5,
+        places: { east: 'China', west: 'Persia' },
+        note: 'On the Silk Road, from China to Persia, every caravan stopped at the same kind of place: the caravanserai. Every traveler got the same shelter, water and protection — and that is why they came back.',
+      },
+      {
+        t: 4,
+        kicker: 'Team A-7 “Caravanserai”',
+        title: 'What Does Great Management Mean?',
+        subtitle: 'Lessons from the Caravanserai',
+        note: 'We are Team A-7, Caravanserai. Our question: what does great management mean?',
+      },
+      {
+        t: 6,
+        thesis: ['Do the right things.', 'Do them right.', 'Do them fairly —'],
+        thesisTail: 'for everyone who travels with the firm.',
+        note: 'Our answer in one line: great management means doing the right things, doing them right, and doing them fairly for everyone who travels with the firm.',
+      },
+    ],
+  },
   { id: 'purpose', name: 'Q1 — Purpose', start: 50, end: 110, steps: [] },
   { id: 'equity', name: 'Q2 — Equity', start: 110, end: 190, steps: [] },
   { id: 'conscious', name: 'Q3 — Conscious business', start: 190, end: 250, steps: [] },
   { id: 'close', name: 'Our fields + close', start: 250, end: 280, steps: [] },
+  // Decisions (team, 2026-09-27):
+  // - Scene 3: Costco beat cut for time; the Aral Sea stays.
+  // - Scene 4 SK chart: only reported figures are labelled (−3.1tn environmental,
+  //   32.2tn net). The gross bar is drawn to scale but carries no number.
+  // - Scene 5: member majors/lenses stay as report placeholders until supplied.
 ];
