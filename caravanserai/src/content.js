@@ -197,7 +197,61 @@ export const scenes = [
       },
     ],
   },
-  { id: 'conscious', name: 'Q3 — Conscious business', start: 190, end: 250, steps: [] },
+  {
+    id: 'conscious',
+    name: 'Q3 — Conscious business',
+    start: 190,
+    end: 250,
+    kicker: 'Q3 · What is the meaning of conscious business?',
+    steps: [
+      {
+        t: 9,
+        lines: ['Knows why it exists.', 'Sees what it leaves behind.', 'Acts on both.'],
+        glow: ['Mission', 'Impact'],
+        note: 'Our definition: a conscious business knows why it exists, sees the full consequences of what it does — and acts on both. Prof. Park calls these two awarenesses mission and impact.',
+      },
+      {
+        t: 12,
+        label: 'SK Group · Double Bottom Line · 2025',
+        bars: {
+          gross: { label: 'Social value created' },
+          env: { value: '−3.1', unit: 'tn won', label: 'Environmental impact' },
+          net: { value: '32.2', unit: 'tn won', label: 'Net social value' },
+        },
+        line: 'Publishing your own damage — that’s accounting, not advertising.',
+        note: 'SK measures the social value its affiliates create, in won, every year. For 2025: 32.2 trillion won — and that is a net figure. SK reports its environmental impact as minus 3.1 trillion won and subtracts it. Publishing your own damage is accounting, not advertising.',
+      },
+      {
+        t: 12,
+        brand: 'TOMS',
+        front: { title: 'One for One', text: 'a pair donated for every pair sold' },
+        back: { when: '2021', title: 'At least one third of net profits', text: 'to grassroots organizations chosen with local partners' },
+        line: 'Conscious means revising your own good idea.',
+        note: 'TOMS built its brand on One for One. But donated shoes risked undercutting the local economies they meant to help. In 2021 TOMS retired the model and committed at least a third of net profits to grassroots organizations chosen with local partners. Conscious means revising your own good idea.',
+      },
+      {
+        t: 8,
+        title: 'The Caravanserai Test',
+        question: { q: 'Why do we keep the inn?', dim: 'Purpose' },
+        note: 'So we propose a test, named for our team. Four questions. One: why do we keep the inn — does the firm know why it exists, beyond making money?',
+      },
+      {
+        t: 6,
+        question: { q: 'Who is staying at our inn tonight?', dim: 'Stakeholders' },
+        note: 'Two: who is staying at our inn tonight — every stakeholder, including nature and future generations?',
+      },
+      {
+        t: 6,
+        question: { q: 'What do we leave on the road behind us?', dim: 'Impact' },
+        note: 'Three: what do we leave on the road behind us — do we know, publish and own our externalities?',
+      },
+      {
+        t: 7,
+        question: { q: 'Would every traveler call it fair?', dim: 'Equity' },
+        note: 'Four: would every traveler call it fair? A firm that can answer all four honestly is conscious. One that avoids any of them is not.',
+      },
+    ],
+  },
   { id: 'close', name: 'Our fields + close', start: 250, end: 280, steps: [] },
   // Decisions (team, 2026-09-27):
   // - Scene 3: Costco beat cut for time; the Aral Sea stays.

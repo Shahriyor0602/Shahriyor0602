@@ -416,3 +416,68 @@ export function uzbekLit(n) {
   }
   return { pos: base.pos, col, delay };
 }
+
+// ---------------------------------------------------------------------------
+// The caravanserai, large: a walled façade with corner towers, a tall pointed
+// portal (iwan) glowing from within, and four arcade arches where the Test's
+// lanterns hang. Drawn in stage pixels on the full frame.
+export const INN_LANTERNS = [
+  [1030, 640], [1140, 640], [1520, 640], [1630, 640],
+];
+
+function pointedArch(ctx, cx, top, bottom, w) {
+  ctx.moveTo(cx - w / 2, bottom);
+  ctx.lineTo(cx - w / 2, top + w * 0.55);
+  ctx.quadraticCurveTo(cx - w / 2, top + w * 0.1, cx, top);
+  ctx.quadraticCurveTo(cx + w / 2, top + w * 0.1, cx + w / 2, top + w * 0.55);
+  ctx.lineTo(cx + w / 2, bottom);
+  ctx.closePath();
+}
+
+function drawInn(ctx) {
+  const S = 'rgb(255,0,0)';
+  // Ground.
+  ctx.fillStyle = 'rgb(0,0,255)';
+  ctx.fillRect(780, 868, 1100, 4);
+  for (let i = 0; i < 40; i++) ctx.fillRect(760 + Math.random() * 1140, 880 + Math.random() * 60, 30 + Math.random() * 80, 2);
+
+  ctx.fillStyle = S;
+  ctx.fillRect(920, 600, 820, 268); // wall
+  for (let x = 924; x < 1736; x += 36) ctx.fillRect(x, 584, 20, 18); // crenellations
+  ctx.fillRect(880, 520, 80, 348); // towers
+  ctx.fillRect(1700, 520, 80, 348);
+  ctx.fillRect(872, 508, 96, 14);
+  ctx.fillRect(1692, 508, 96, 14);
+  ctx.fillRect(1230, 430, 200, 438); // portal block
+  ctx.beginPath(); // dome behind the portal
+  ctx.arc(1330, 440, 70, Math.PI, 0);
+  ctx.fill();
+
+  // Cut openings.
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath();
+  pointedArch(ctx, 1330, 480, 868, 130);
+  for (const [x] of INN_LANTERNS) pointedArch(ctx, x, 720, 868, 64);
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Warm light in the portal; the arcade stays dark (faint) until the lanterns.
+  ctx.fillStyle = 'rgb(0,255,0)';
+  ctx.beginPath();
+  pointedArch(ctx, 1330, 500, 868, 104);
+  ctx.fill();
+  ctx.fillStyle = 'rgb(0,0,255)';
+  ctx.beginPath();
+  for (const [x] of INN_LANTERNS) pointedArch(ctx, x, 734, 868, 48);
+  ctx.fill();
+}
+
+export function inn(n) {
+  return sampleCanvas(n, 1920, 1080, drawInn, FRAME_BOX, {
+    edgeShare: 0.62,
+    lightShare: 0.07,
+    faintShare: 0.12,
+    depth: 0.06,
+    delay: (u, v, kind) => (kind === 'light' ? 0.8 + Math.random() * 0.2 : Math.min(1, (1 - v) * 0.6 + Math.random() * 0.35)),
+  });
+}
