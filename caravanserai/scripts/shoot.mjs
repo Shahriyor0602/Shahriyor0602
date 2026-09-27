@@ -11,6 +11,8 @@ import { pathToFileURL } from 'node:url';
 
 const scene = Number(process.argv[2] ?? 0);
 const mid = process.argv.includes('--mid');
+// --only=2,6 restricts mid-frame capture to those steps.
+const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7).split(',').map(Number);
 const file = resolve('dist/index.html');
 if (!existsSync(file)) throw new Error('run `npm run build` first');
 const url = pathToFileURL(file).href;
@@ -96,7 +98,7 @@ for (let k = 0; k < steps; k++) {
   for (const i of issues) console.log('  ⚠ ' + i);
   if (!issues.length) console.log('  ok: no clipping / overlaps');
 
-  if (mid) {
+  if (mid && (!only || only.includes(k))) {
     // Deterministic mid-step frames: seek the scene timeline to exact times.
     const a = labels[k ? `s${k - 1}` : 'start'];
     const b = labels[`s${k}`];

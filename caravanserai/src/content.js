@@ -121,7 +121,82 @@ export const scenes = [
       },
     ],
   },
-  { id: 'equity', name: 'Q2 — Equity', start: 110, end: 190, steps: [] },
+  {
+    id: 'equity',
+    name: 'Q2 — Equity',
+    start: 110,
+    end: 190,
+    kicker: 'Q2 · Effectiveness, efficiency, or equity?',
+    steps: [
+      {
+        t: 7,
+        values: [
+          { word: 'Effectiveness', plain: 'doing the right things' },
+          { word: 'Efficiency', plain: 'doing things right' },
+          { word: 'Equity', plain: 'doing things fairly' },
+        ],
+        pick: 'Our answer: equity',
+        note: 'Prof. Park gives three values of management: effectiveness, doing the right things; efficiency, doing things right; equity, doing things fairly. We chose equity.',
+      },
+      {
+        t: 10,
+        car: ['Efficiency is the engine.', 'Effectiveness is the steering.', 'Equity is the road.'],
+        note: 'Our metaphor: efficiency is the engine. Effectiveness is the steering wheel. Equity is the road.',
+      },
+      {
+        t: 5,
+        crash: 'A fast car with good steering still crashes if there is no road beneath it.',
+        note: 'A fast car with excellent steering still crashes if there is no road beneath it.',
+      },
+      {
+        t: 5,
+        card: { name: 'Volkswagen', year: '2015', stat: '11M', statNote: 'up to 11 million vehicles affected', more: 'costs passed US$30 billion by 2017' },
+        note: 'Volkswagen, 2015: software that cheated emissions tests. Up to 11 million vehicles; costs passed thirty billion dollars by 2017.',
+      },
+      {
+        t: 5,
+        card: { name: 'Wells Fargo', year: '2016', stat: '$3B', statNote: 'settlement with the DOJ and SEC, 2020', more: 'unauthorized accounts opened to hit sales targets' },
+        note: 'Wells Fargo: cross-selling targets so aggressive that staff opened unauthorized accounts. A three-billion-dollar settlement.',
+      },
+      {
+        t: 7,
+        card: { name: 'Boeing 737 MAX', year: '2018–19', stat: '346', statNote: 'lives lost in two crashes', more: 'speed and cost pursued over pilots, passengers and engineers' },
+        line: 'Not failures of efficiency. Failures of fairness.',
+        note: 'Boeing 737 MAX: 346 lives lost in two crashes. None of these were failures of efficiency. They were failures of fairness.',
+      },
+      {
+        t: 8,
+        region: 'Uzbek cotton',
+        stat: '331',
+        statNote: 'global brands and retailers refused to buy it',
+        why: 'State-organized forced labour kept the harvest “efficient.”',
+        note: 'Our own region. For decades Uzbekistan’s cotton harvest relied on state-organized forced labour. Labour was nearly free — so 331 global brands and retailers signed a pledge and refused to buy Uzbek cotton at all.',
+      },
+      {
+        t: 10,
+        lift: [
+          { when: '2021 harvest', text: 'ILO monitoring: systemic forced and child labour eradicated' },
+          { when: '10 March 2022', text: 'Boycott ends' },
+        ],
+        line: 'Equity wasn’t the cost. It was the market access.',
+        note: 'After years of reform, ILO monitoring of the 2021 harvest found systemic forced and child labour eradicated, and in March 2022 the boycott ended. Equity wasn’t the cost. It was the market access.',
+      },
+      {
+        t: 10,
+        sea: 'Aral Sea',
+        then: { year: '1960', value: '68,000 km²' },
+        now: { year: '2007', value: '~10%', text: 'of its original size' },
+        line: 'Equity includes those not yet born.',
+        note: 'The Aral Sea: 68,000 square kilometres in 1960, drained for cotton, down to about ten percent of its size by 2007. Equity includes those not yet born.',
+      },
+      {
+        t: 13,
+        tag: 'Where we disagreed',
+        lines: ['Effectiveness sets the destination.', 'Equity decides whether anyone travels with you.'],
+        note: 'Not all of us started from equity. Some argued effectiveness comes first — fairness without a mission goes nowhere. It changed how we say it: effectiveness sets the destination; equity decides whether anyone will travel with you.',
+      },
+    ],
+  },
   { id: 'conscious', name: 'Q3 — Conscious business', start: 190, end: 250, steps: [] },
   { id: 'close', name: 'Our fields + close', start: 250, end: 280, steps: [] },
   // Decisions (team, 2026-09-27):

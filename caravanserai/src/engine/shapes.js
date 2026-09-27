@@ -3,6 +3,9 @@
 // Silhouettes are drawn on an offscreen canvas and sampled, so a shape is just
 // a drawing — no model files, nothing fetched at runtime.
 
+import { UZBEKISTAN, project } from './geo.js';
+import { WORLD_W, WORLD_H } from './stage.js';
+
 const SAND = [0.85, 0.78, 0.64];
 const WHITE = [0.94, 0.91, 0.87];
 const AMBER = [0.91, 0.64, 0.24];
@@ -367,4 +370,49 @@ export function route(n) {
 export function routePx(x, y) {
   const s = (ROUTE_BOX.x1 - ROUTE_BOX.x0) / ROUTE_CANVAS.w;
   return [ROUTE_BOX.x0 + x * s, ROUTE_BOX.y0 + (ROUTE_CANVAS.h - y) * s];
+}
+
+// ---------------------------------------------------------------------------
+// Uzbekistan outline in stage pixels (full 1920×1080 frame at z = 0).
+const FRAME_BOX = { x0: -WORLD_W / 2, x1: WORLD_W / 2, y0: -WORLD_H / 2 };
+let uzbekCache = null;
+
+function drawUzbek(ctx) {
+  const path = () => {
+    ctx.beginPath();
+    UZBEKISTAN.forEach((p, i) => (i ? ctx.lineTo(...project(p)) : ctx.moveTo(...project(p))));
+    ctx.closePath();
+  };
+  path();
+  ctx.fillStyle = 'rgb(0,0,255)';
+  ctx.fill();
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = 'rgb(255,0,0)';
+  ctx.stroke();
+}
+
+export function uzbek(n) {
+  uzbekCache ??= sampleCanvas(n, 1920, 1080, drawUzbek, FRAME_BOX, {
+    edgeShare: 1,
+    lightShare: 0,
+    faintShare: 0.35,
+    depth: 0.04,
+    delay: (u) => Math.min(1, u * 0.8 + Math.random() * 0.2),
+  });
+  return uzbekCache;
+}
+
+// Same points, lit amber: the morph ripples west → east as a colour change.
+export function uzbekLit(n) {
+  const base = uzbek(n);
+  const col = new Float32Array(n * 3);
+  const delay = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const faint = base.col[i * 3] < 0.3;
+    const c = faint ? AMBER.map((v) => v * (0.12 + Math.random() * 0.12)) : mixc(AMBER, [1, 0.82, 0.5], Math.random() * 0.5);
+    col.set(c, i * 3);
+    delay[i] = Math.min(1, (base.pos[i * 3] / WORLD_W + 0.5) * 0.85 + Math.random() * 0.15);
+  }
+  return { pos: base.pos, col, delay };
 }
