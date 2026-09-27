@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Korea vs Uzbekistan</title>
+<style>
+@font-face { font-family: "Anton"; src: url(fonts/anton.woff2) format("woff2"); }
+@font-face { font-family: "Archivo"; font-weight: 500; src: url(fonts/archivo500.woff2) format("woff2"); }
+@font-face { font-family: "Archivo"; font-weight: 800; src: url(fonts/archivo800.woff2) format("woff2"); }
+@font-face { font-family: "Mono"; src: url(fonts/mono.woff2) format("woff2"); }
+@font-face { font-family: "BHS"; src: url(fonts/bhs.woff2) format("woff2"); }
+
+:root {
+  --ink: #07070b;
+  --pink: #ff4fa0;
+  --pink-hot: #ff7ab8;
+  --pink-deep: #c81f6e;
+  --berry: #5e0a33;
+  --white: #f6f4ef;
+  --uz-blue: #0099b5;
+  --uz-green: #1eb53a;
+  --uz-red: #ce1126;
+  --kr-red: #cd2e3a;
+  --kr-blue: #0047a0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; overflow: hidden; }
+body { display: grid; place-items: center; min-height: 100vh; }
+body.render { display: block; min-height: 0; }
+
+.stage {
+  position: relative; width: 1080px; height: 1920px; overflow: hidden;
+  background: var(--ink); color: var(--white);
+  font-family: "Archivo", sans-serif; transform-origin: 0 0;
+}
+.f45 .stage { height: 1350px; }
+.abs { position: absolute; }
+.shake { position: absolute; inset: 0; }
+
+/* ---------- background ---------- */
+.glow { position: absolute; inset: -10%; pointer-events: none; }
+.glow-kor { background: radial-gradient(ellipse 820px 640px at 72% 26%, rgba(255,79,160,.55), rgba(255,79,160,.12) 45%, transparent 70%); }
+.glow-uzb { background: radial-gradient(ellipse 820px 640px at 26% 62%, rgba(150,210,255,.26), rgba(150,210,255,.06) 45%, transparent 70%); }
+.f45 .glow-kor { background: radial-gradient(ellipse 620px 700px at 24% 48%, rgba(255,79,160,.55), rgba(255,79,160,.12) 45%, transparent 70%); }
+.f45 .glow-uzb { background: radial-gradient(ellipse 620px 700px at 76% 48%, rgba(150,210,255,.26), rgba(150,210,255,.06) 45%, transparent 70%); }
+.pitch {
+  position: absolute; inset: 0; opacity: .07;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 134px, rgba(255,255,255,.9) 134px 135px);
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+          mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+}
+.streak { position: absolute; left: 0; width: 100%; height: 3px; transform-origin: 0 50%; }
+.streak-kor { top: 520px; background: linear-gradient(90deg, transparent, var(--pink) 30%, #fff 50%, var(--pink) 70%, transparent); box-shadow: 0 0 24px var(--pink); }
+.streak-uzb { top: 1260px; background: linear-gradient(90deg, transparent, #bfe6ff 30%, #fff 50%, #bfe6ff 70%, transparent); box-shadow: 0 0 24px #bfe6ff; transform-origin: 100% 50%; }
+.f45 .streak-kor { top: 560px; }
+.f45 .streak-uzb { top: 760px; }
+
+.particle { position: absolute; width: 6px; height: 6px; border-radius: 50%; }
+
+/* ---------- top bar ---------- */
+.topbar { left: 60px; right: 60px; top: 150px; display: flex; justify-content: space-between; align-items: center;
+  font-family: "Mono"; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,244,239,.8); }
+.topbar .dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--pink); margin-right: 14px; box-shadow: 0 0 16px var(--pink); vertical-align: 1px; }
+.f45 .topbar { top: 56px; font-size: 22px; }
+
+/* ---------- team codes ---------- */
+.code { font-family: "Anton"; font-size: 440px; line-height: 1.12; display: flex; overflow: hidden; letter-spacing: -.01em; }
+.code span { display: block; will-change: transform; }
+.kor-code { left: 44px; top: 186px;
+  background: linear-gradient(180deg, var(--pink-hot), var(--pink) 55%, var(--pink-deep));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kor-code span { background: inherit; -webkit-background-clip: text; background-clip: text; }
+.uzb-code { right: 44px; top: 930px; color: var(--white); }
+.f45 .code { font-size: 300px; }
+.f45 .kor-code { left: 44px; top: 70px; }
+.f45 .uzb-code { right: 44px; top: 70px; }
+
+/* ---------- jerseys ---------- */
+.jersey { width: 540px; filter: drop-shadow(0 40px 50px rgba(0,0,0,.6)); will-change: transform; }
+.jersey svg { display: block; width: 100%; height: auto; overflow: visible; }
+.kor-jersey { left: 500px; top: 250px; }
+.uzb-jersey { left: 40px; top: 1010px; }
+.f45 .jersey { width: 460px; }
+.f45 .kor-jersey { left: 40px; top: 400px; }
+.f45 .uzb-jersey { left: 580px; top: 400px; }
+
+/* ---------- versus ---------- */
+.slash { left: 50%; top: 935px; width: 1500px; height: 0; transform: translate(-50%, 0) rotate(-8deg); }
+.slash i { position: absolute; left: 0; width: 100%; height: 4px; transform-origin: 50% 50%; }
+.slash i:nth-child(1) { top: -34px; background: linear-gradient(90deg, transparent, var(--pink) 20%, var(--pink) 80%, transparent); box-shadow: 0 0 18px rgba(255,79,160,.8); }
+.slash i:nth-child(2) { top: 30px; background: linear-gradient(90deg, transparent, var(--white) 20%, var(--white) 80%, transparent); box-shadow: 0 0 18px rgba(255,255,255,.5); }
+.f45 .slash { top: 640px; width: 620px; transform: translate(-50%, 0) rotate(-78deg); }
+
+.vs { left: 540px; top: 935px; width: 0; height: 0; }
+.vs-inner { position: absolute; left: -110px; top: -110px; width: 220px; height: 220px; display: grid; place-items: center; }
+.vs-ring { position: absolute; inset: 0; border-radius: 50%; background: var(--ink);
+  border: 5px solid transparent;
+  background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(135deg, var(--pink), var(--pink) 48%, var(--white) 52%, var(--white));
+  background-origin: border-box; background-clip: padding-box, border-box;
+  box-shadow: 0 0 60px rgba(255,79,160,.35), 0 0 120px rgba(255,255,255,.12); }
+.vs-text { position: relative; font-family: "Anton"; font-size: 132px; line-height: 1; letter-spacing: -.02em; margin-top: -6px;
+  background: linear-gradient(135deg, var(--pink-hot) 0 47%, var(--white) 53% 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.vs-shock { position: absolute; left: -110px; top: -110px; width: 220px; height: 220px; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); }
+.f45 .vs { top: 640px; }
+.f45 .vs-inner { transform: scale(.8); }
+
+/* ---------- meta ---------- */
+.meta { display: flex; flex-direction: column; gap: 14px; }
+.meta .row { display: flex; align-items: center; gap: 20px; }
+.meta .flag { display: block; height: 52px; border-radius: 5px; box-shadow: 0 0 0 1.5px rgba(255,255,255,.25), 0 8px 18px rgba(0,0,0,.4); overflow: hidden; }
+.meta .name { font-weight: 800; font-size: 50px; letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
+.meta .native { font-size: 40px; line-height: 1; color: rgba(246,244,239,.75); }
+.meta .kr { font-family: "BHS"; }
+.meta .tag { font-family: "Mono"; font-size: 22px; letter-spacing: .2em; text-transform: uppercase; padding: 8px 14px; border-radius: 100px; line-height: 1; }
+.kor-meta { left: 60px; top: 690px; }
+.kor-meta .tag { background: var(--pink); color: var(--ink); }
+.uzb-meta { right: 60px; top: 1440px; align-items: flex-end; text-align: right; }
+.uzb-meta .row { flex-direction: row-reverse; }
+.uzb-meta .tag { background: var(--white); color: var(--ink); }
+.f45 .meta .name { font-size: 38px; }
+.f45 .meta .native { font-size: 30px; }
+.f45 .meta .flag { height: 40px; }
+.f45 .meta .tag { font-size: 18px; }
+.f45 .meta { gap: 12px; }
+.f45 .kor-meta { left: 60px; top: 910px; }
+.f45 .uzb-meta { right: 60px; top: 910px; }
+
+/* ---------- info ---------- */
+.rule { left: 60px; right: 60px; top: 1620px; height: 2px; background: linear-gradient(90deg, var(--pink), var(--white)); transform-origin: 0 50%; }
+.time { left: 52px; top: 1612px; font-family: "Anton"; font-size: 230px; line-height: 1.15; display: flex; }
+.time .col { height: 1.15em; overflow: hidden; }
+.time .col span { display: block; height: 1.15em; }
+.time .colon { color: var(--pink); }
+.when { right: 60px; top: 1664px; text-align: right; display: flex; flex-direction: column; gap: 14px; }
+.when .k { font-family: "Mono"; font-size: 24px; letter-spacing: .24em; color: var(--pink); text-transform: uppercase; }
+.when .d { font-family: "Anton"; font-size: 88px; line-height: 1; letter-spacing: .01em; }
+.when .w { font-family: "Archivo"; font-weight: 800; font-size: 34px; letter-spacing: .3em; text-transform: uppercase; color: rgba(246,244,239,.8); }
+.f45 .rule { top: 1072px; }
+.f45 .time { top: 1062px; font-size: 190px; }
+.f45 .when { top: 1100px; gap: 10px; }
+.f45 .when .d { font-size: 74px; }
+.f45 .when .w { font-size: 28px; }
+.f45 .when .k { font-size: 20px; }
+
+/* ---------- ticker ---------- */
+.ticker { left: 0; right: 0; top: 1860px; height: 60px; background: var(--pink); color: var(--ink); overflow: hidden; display: flex; align-items: center; }
+.ticker .track { display: flex; white-space: nowrap; font-family: "Anton"; font-size: 34px; letter-spacing: .06em; will-change: transform; }
+.ticker .track span { padding-right: 34px; }
+.ticker .track b { font-weight: 400; color: #fff; padding-right: 34px; }
+.f45 .ticker { top: 1296px; height: 54px; }
+.f45 .ticker .track { font-size: 30px; }
+
+/* ---------- finish ---------- */
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%); }
+.grain { position: absolute; inset: -100px; pointer-events: none; opacity: .09; mix-blend-mode: overlay; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Taegukgi, 3:2 -->
+    <symbol id="flag-kor" viewBox="0 0 360 240">
+      <rect width="360" height="240" fill="#fff"/>
+      <g transform="translate(180 120) rotate(33.69)">
+        <path d="M-60 0A60 60 0 0 1 60 0Z" fill="#cd2e3a"/>
+        <path d="M-60 0A60 60 0 0 0 60 0Z" fill="#0047a0"/>
+        <circle cx="-30" cy="0" r="30" fill="#0047a0"/>
+        <circle cx="30" cy="0" r="30" fill="#cd2e3a"/>
+      </g>
+      <g id="trigrams" fill="#000"></g>
+    </symbol>
+    <!-- Uzbekistan, 2:1 -->
+    <symbol id="flag-uzb" viewBox="0 0 250 125">
+      <rect width="250" height="125" fill="#fff"/>
+      <rect width="250" height="40" fill="#0099b5"/>
+      <rect y="40" width="250" height="2.5" fill="#ce1126"/>
+      <rect y="82.5" width="250" height="2.5" fill="#ce1126"/>
+      <rect y="85" width="250" height="40" fill="#1eb53a"/>
+      <circle cx="35" cy="20" r="15" fill="#fff"/>
+      <circle cx="40" cy="20" r="13" fill="#0099b5"/>
+      <g id="uz-stars" fill="#fff"></g>
+    </symbol>
+
+    <!-- shared jersey shape -->
+    <path id="j-shape" d="M150 22Q200 64 250 22L322 42Q362 62 396 128L346 170Q330 152 316 140L322 418Q200 434 78 418L84 140Q70 152 54 170L4 128Q38 62 78 42Z"/>
+    <clipPath id="j-clip"><use href="#j-shape"/></clipPath>
+
+    <linearGradient id="j-shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity=".38"/>
+      <stop offset=".18" stop-color="#000" stop-opacity=".05"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity=".10"/>
+      <stop offset=".8" stop-color="#000" stop-opacity=".06"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".42"/>
+    </linearGradient>
+    <linearGradient id="j-vshade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".14"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".25"/>
+    </linearGradient>
+    <linearGradient id="j-sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Korea: tonal tiger-stripe brush strokes -->
+    <pattern id="tiger" width="400" height="440" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#c81f6e" stroke-linecap="round" stroke-opacity=".38">
+        <path d="M-20 120C60 96 90 150 170 122S290 90 420 128" stroke-width="16"/>
+        <path d="M-20 200C50 176 120 230 200 200S320 170 420 214" stroke-width="10"/>
+        <path d="M-20 286C70 262 110 318 190 290S300 250 420 300" stroke-width="18"/>
+        <path d="M-20 366C60 344 140 392 220 366S330 336 420 382" stroke-width="9"/>
+      </g>
+    </pattern>
+    <!-- Uzbekistan: ikat (adras) motif -->
+    <pattern id="ikat" width="80" height="96" patternUnits="userSpaceOnUse">
+      <path d="M40 4L62 30L48 30L66 48L48 66L62 66L40 92L18 66L32 66L14 48L32 30L18 30Z" fill="none" stroke="#0099b5" stroke-opacity=".22" stroke-width="3"/>
+      <path d="M40 34L52 48L40 62L28 48Z" fill="#1eb53a" fill-opacity=".18"/>
+    </pattern>
+  </defs>
+</svg>
+
+<div class="stage" id="stage">
+  <div class="shake" id="shake">
+    <div class="glow glow-kor" id="glowKor"></div>
+    <div class="glow glow-uzb" id="glowUzb"></div>
+    <div class="pitch" id="pitch"></div>
+    <div id="particles"></div>
+    <div class="streak streak-kor" id="streakKor"></div>
+    <div class="streak streak-uzb" id="streakUzb"></div>
+
+    <div class="abs topbar" id="topbar">
+      <span><i class="dot"></i>Matchday</span>
+      <span>Tue · 06.10.2026</span>
+    </div>
+
+    <div class="abs code kor-code" id="korCode"><span>K</span><span>O</span><span>R</span></div>
+    <div class="abs code uzb-code" id="uzbCode"><span>U</span><span>Z</span><span>B</span></div>
+
+    <div class="abs slash" id="slash"><i></i><i></i></div>
+
+    <!-- Korea jersey: pink -->
+    <div class="abs jersey kor-jersey" id="korJersey">
+      <svg viewBox="0 0 400 440">
+        <g clip-path="url(#j-clip)">
+          <rect width="400" height="440" fill="#ff4fa0"/>
+          <rect width="400" height="440" fill="url(#tiger)"/>
+          <path d="M84 140L100 140L96 430L78 430Z M316 140L300 140L304 430L322 430Z" fill="#5e0a33" opacity=".85"/>
+          <path d="M396 128L346 170L338 158L386 116Z M4 128L54 170L62 158L14 116Z" fill="#5e0a33"/>
+          <path d="M150 22Q200 64 250 22" fill="none" stroke="#5e0a33" stroke-width="16"/>
+          <path d="M150 22Q200 38 250 22" fill="none" stroke="#c81f6e" stroke-width="6"/>
+          <use href="#flag-kor" x="238" y="98" width="48" height="32"/>
+          <rect width="400" height="440" fill="url(#j-shade)"/>
+          <rect width="400" height="440" fill="url(#j-vshade)"/>
+          <rect class="sheen" x="-400" width="220" height="440" fill="url(#j-sheen)" transform="skewX(-18)"/>
+        </g>
+        <use href="#j-shape" fill="none" stroke="#ffffff" stroke-opacity=".25" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- Uzbekistan jersey: white -->
+    <div class="abs jersey uzb-jersey" id="uzbJersey">
+      <svg viewBox="0 0 400 440">
+        <g clip-path="url(#j-clip)">
+          <rect width="400" height="440" fill="#f6f4ef"/>
+          <rect width="400" height="440" fill="url(#ikat)"/>
+          <path d="M84 140L96 140L92 430L78 430Z M316 140L304 140L308 430L322 430Z" fill="#0099b5" opacity=".9"/>
+          <path d="M96 140L102 140L98 430L92 430Z M304 140L298 140L302 430L308 430Z" fill="#1eb53a" opacity=".9"/>
+          <path d="M396 128L346 170L340 161L389 120Z M4 128L54 170L60 161L11 120Z" fill="#0099b5"/>
+          <path d="M389 120L340 161L335 154L383 113Z M11 120L60 161L65 154L17 113Z" fill="#1eb53a"/>
+          <path d="M150 22Q200 64 250 22" fill="none" stroke="#0099b5" stroke-width="16"/>
+          <path d="M150 22Q200 64 250 22" fill="none" stroke="#1eb53a" stroke-width="4" transform="translate(0 7)"/>
+          <use href="#flag-uzb" x="236" y="102" width="52" height="26"/>
+          <rect width="400" height="440" fill="url(#j-shade)"/>
+          <rect width="400" height="440" fill="url(#j-vshade)"/>
+          <rect class="sheen" x="-400" width="220" height="440" fill="url(#j-sheen)" transform="skewX(-18)"/>
+        </g>
+        <use href="#j-shape" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="abs vs" id="vs">
+      <div class="vs-shock" id="vsShock"></div>
+      <div class="vs-inner" id="vsInner">
+        <div class="vs-ring"></div>
+        <div class="vs-text">VS</div>
+      </div>
+    </div>
+
+    <div class="abs meta kor-meta" id="korMeta">
+      <div class="row"><svg class="flag" viewBox="0 0 360 240" style="width:78px"><use href="#flag-kor"/></svg><span class="name">South Korea</span></div>
+      <div class="row"><span class="native kr">대한민국</span><span class="tag">Pink kit</span></div>
+    </div>
+    <div class="abs meta uzb-meta" id="uzbMeta">
+      <div class="row"><svg class="flag" viewBox="0 0 250 125" style="width:104px"><use href="#flag-uzb"/></svg><span class="name">Uzbekistan</span></div>
+      <div class="row"><span class="native">O‘ZBEKISTON</span><span class="tag">White kit</span></div>
+    </div>
+
+    <div class="abs rule" id="rule"></div>
+    <div class="abs time" id="time"></div>
+    <div class="abs when" id="when">
+      <span class="k">Kick-off</span>
+      <span class="d">06 OCT</span>
+      <span class="w">Tuesday</span>
+    </div>
+
+    <div class="abs ticker" id="ticker"><div class="track" id="track"></div></div>
+  </div>
+  <canvas class="grain" id="grain"></canvas>
+  <div class="vignette"></div>
+  <div class="flash" id="flash"></div>
+</div>
+
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  const FORMAT = params.get("f") === "45" ? "45" : "916";
+  const RENDER = params.has("render");
+  const DURATION = 9;
+  document.body.classList.add("f" + FORMAT);
+  if (RENDER) document.body.classList.add("render");
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- deterministic randomness ----------
+  function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  // ---------- build flag details ----------
+  (function buildTrigrams() {
+    const g = document.getElementById("trigrams");
+    const T = 10, GAP = 5, LEN = 60, BREAK = 6, START = 90;
+    // [corner vector, bars from inner to outer: 1 = solid, 0 = broken]
+    const corners = [[[-3, -2], [1, 1, 1]], [[3, -2], [0, 1, 0]], [[-3, 2], [1, 0, 1]], [[3, 2], [0, 0, 0]]];
+    let out = "";
+    for (const [[x, y], bars] of corners) {
+      const ang = Math.atan2(y, x) * 180 / Math.PI;
+      out += `<g transform="translate(180 120) rotate(${ang})">`;
+      bars.forEach((solid, i) => {
+        const bx = START + i * (T + GAP);
+        if (solid) out += `<rect x="${bx}" y="${-LEN / 2}" width="${T}" height="${LEN}"/>`;
+        else {
+          const h = (LEN - BREAK) / 2;
+          out += `<rect x="${bx}" y="${-LEN / 2}" width="${T}" height="${h}"/><rect x="${bx}" y="${BREAK / 2}" width="${T}" height="${h}"/>`;
+        }
+      });
+      out += `</g>`;
+    }
+    g.innerHTML = out;
+  })();
+  (function buildStars() {
+    const g = document.getElementById("uz-stars");
+    const cols = [62, 74, 86, 98, 110];
+    const rows = [[9, 3], [20, 4], [31, 5]];
+    const star = (cx, cy, r) => {
+      let d = "";
+      for (let i = 0; i < 10; i++) {
+        const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .4 : r;
+        d += (i ? "L" : "M") + (cx + rr * Math.cos(a)).toFixed(2) + " " + (cy + rr * Math.sin(a)).toFixed(2);
+      }
+      return `<path d="${d}Z"/>`;
+    };
+    let out = "";
+    for (const [y, n] of rows) cols.slice(5 - n).forEach((x) => out += star(x, y, 4.4));
+    g.innerHTML = out;
+  })();
+
+  // ---------- time digits (slot roll) ----------
+  const TIME = "20:00";
+  const timeEl = $("time"), rng0 = mulberry32(7);
+  const slots = [];
+  [...TIME].forEach((ch) => {
+    if (ch === ":") { const s = document.createElement("span"); s.className = "colon"; s.textContent = ":"; timeEl.appendChild(s); slots.push({ colon: s }); return; }
+    const col = document.createElement("div"); col.className = "col";
+    const inner = document.createElement("div");
+    const seq = []; for (let i = 0; i < 9; i++) seq.push(Math.floor(rng0() * 10)); seq.push(ch);
+    inner.innerHTML = seq.map((d) => `<span>${d}</span>`).join("");
+    col.appendChild(inner); timeEl.appendChild(col);
+    slots.push({ inner, n: seq.length - 1 });
+  });
+
+  // ---------- ticker ----------
+  const phrase = `<span>SOUTH KOREA</span><b>×</b><span>UZBEKISTAN</span><b>•</b><span>TUE 06 OCT</span><b>•</b><span>20:00 KICK-OFF</span><b>•</b><span>PINK VS WHITE</span><b>•</b>`;
+  $("track").innerHTML = phrase.repeat(6);
+
+  // ---------- particles ----------
+  const W = 1080, H = FORMAT === "45" ? 1350 : 1920;
+  const prng = mulberry32(42), parts = [];
+  const pWrap = $("particles");
+  for (let i = 0; i < 46; i++) {
+    const el = document.createElement("div"); el.className = "particle";
+    const kor = FORMAT === "45" ? prng() < .5 : i % 2 === 0;
+    let x = prng() * W, y = prng() * H;
+    if (FORMAT === "45") x = kor ? prng() * W * .5 : W * .5 + prng() * W * .5;
+    else y = kor ? prng() * H * .5 : H * .5 + prng() * H * .5;
+    const size = 2 + prng() * 5;
+    el.style.width = el.style.height = size + "px";
+    el.style.background = kor ? "#ff7ab8" : "#dff2ff";
+    el.style.boxShadow = `0 0 ${size * 3}px ${kor ? "#ff4fa0" : "#bfe6ff"}`;
+    pWrap.appendChild(el);
+    parts.push({ el, x, y, vy: 12 + prng() * 30, sway: 10 + prng() * 24, ph: prng() * 6.28, a: .25 + prng() * .6 });
+  }
+
+  // ---------- grain ----------
+  const gc = $("grain"); gc.width = (W + 200) >> 1; gc.height = (H + 200) >> 1;
+  (function () {
+    const ctx = gc.getContext("2d"), img = ctx.createImageData(gc.width, gc.height), r = mulberry32(3);
+    for (let i = 0; i < img.data.length; i += 4) { const v = r() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    ctx.putImageData(img, 0, 0);
+    gc.style.width = (W + 200) + "px"; gc.style.height = (H + 200) + "px";
+  })();
+
+  // ---------- easing ----------
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const seg = (t, a, b) => clamp((t - a) / (b - a));
+  const outExpo = (x) => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+  const outCubic = (x) => 1 - Math.pow(1 - x, 3);
+  const inOutCubic = (x) => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const outBack = (x, s = 1.7) => 1 + (s + 1) * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2);
+  const lerp = (a, b, x) => a + (b - a) * x;
+
+  const korLetters = [...$("korCode").children], uzbLetters = [...$("uzbCode").children];
+  const korMetaRows = [...$("korMeta").children], uzbMetaRows = [...$("uzbMeta").children];
+  const whenRows = [...$("when").children];
+  const slashLines = [...$("slash").children];
+  const sheens = [...document.querySelectorAll(".sheen")];
+  const trackEl = $("track");
+  let trackHalf = 0;
+
+  const IMPACT = 1.95;
+  const isV = FORMAT === "916";
+  const jersey = {
+    kor: { el: $("korJersey"), from: isV ? 1 : -1, rot: isV ? -7 : -6 },
+    uzb: { el: $("uzbJersey"), from: isV ? -1 : 1, rot: isV ? 7 : 6 },
+  };
+
+  function render(t) {
+    // streaks
+    const s1 = seg(t, .05, .6), s2 = seg(t, .2, .75);
+    $("streakKor").style.transform = `scaleX(${outExpo(s1)})`;
+    $("streakKor").style.opacity = 1 - seg(t, .7, 1.3);
+    $("streakUzb").style.transform = `scaleX(${outExpo(s2)})`;
+    $("streakUzb").style.opacity = 1 - seg(t, .85, 1.45);
+
+    // background
+    const pulse = .9 + .1 * Math.sin(t * 2.2);
+    $("glowKor").style.opacity = outCubic(seg(t, .3, 1.3)) * pulse;
+    $("glowUzb").style.opacity = outCubic(seg(t, .45, 1.45)) * (.9 + .1 * Math.sin(t * 2.2 + 2));
+    $("pitch").style.opacity = .07 * seg(t, 1.2, 2.4);
+    $("pitch").style.backgroundPosition = `${-t * 14}px 0`;
+
+    // team codes
+    korLetters.forEach((el, i) => {
+      const p = outExpo(seg(t, .45 + i * .08, 1.25 + i * .08));
+      el.style.transform = `translateY(${(1 - p) * 105}%)`;
+    });
+    uzbLetters.forEach((el, i) => {
+      const p = outExpo(seg(t, .62 + i * .08, 1.42 + i * .08));
+      el.style.transform = `translateY(${(1 - p) * 105}%)`;
+    });
+    const drift = Math.sin(t * .6) * 6;
+    $("korCode").style.translate = `${drift}px 0`;
+    $("uzbCode").style.translate = `${-drift}px 0`;
+
+    // jerseys
+    for (const [k, j] of Object.entries(jersey)) {
+      const start = k === "kor" ? 1.0 : 1.12;
+      const p = seg(t, start, start + .85);
+      const e = outBack(p, 1.3);
+      const x = (1 - e) * 900 * j.from;
+      const rot = j.rot + (1 - e) * 24 * j.from;
+      const fl = seg(t, 2.2, 3.2);
+      const fy = Math.sin((t - 2) * 1.7 + (k === "kor" ? 0 : 1.6)) * 10 * fl;
+      const fr = Math.sin((t - 2) * 1.3 + (k === "kor" ? .8 : 2.4)) * 1.1 * fl;
+      const sc = 1 + (1 - outCubic(p)) * .15;
+      j.el.style.transform = `translate(${x}px, ${fy}px) rotate(${rot + fr}deg) scale(${sc})`;
+      j.el.style.opacity = p > 0 ? 1 : 0;
+    }
+    sheens.forEach((el, i) => {
+      const p = inOutCubic(seg(t, 3.9 + i * .35, 4.9 + i * .35));
+      el.setAttribute("x", lerp(-420, 620, p));
+    });
+
+    // VS impact
+    const vp = seg(t, IMPACT - .28, IMPACT);
+    const vsScale = vp < 1 ? lerp(3.2, 1, inOutCubic(vp)) : 1 + .12 * Math.exp(-(t - IMPACT) * 9) * Math.cos((t - IMPACT) * 30);
+    $("vsInner").style.transform = `scale(${vsScale * (isV ? 1 : .8)}) rotate(${(1 - outCubic(vp)) * -30}deg)`;
+    $("vsInner").style.opacity = outCubic(seg(t, IMPACT - .28, IMPACT - .1));
+    const sp = seg(t, IMPACT, IMPACT + .6);
+    $("vsShock").style.transform = `scale(${lerp(1, isV ? 4.2 : 3.4, outCubic(sp))})`;
+    $("vsShock").style.opacity = sp > 0 && sp < 1 ? (1 - sp) * .9 : 0;
+    slashLines.forEach((el, i) => {
+      const p = outExpo(seg(t, IMPACT - .05 + i * .06, IMPACT + .7 + i * .06));
+      el.style.transform = `scaleX(${p})`;
+    });
+
+    // flash + shake
+    const ft = t - IMPACT;
+    $("flash").style.opacity = ft >= 0 ? .42 * Math.exp(-ft * 11) : 0;
+    const amp = ft >= 0 ? 16 * Math.exp(-ft * 8) : 0;
+    $("shake").style.transform = `translate(${Math.sin(ft * 70) * amp}px, ${Math.cos(ft * 55) * amp * .7}px)`;
+
+    // meta
+    korMetaRows.forEach((el, i) => {
+      const p = outExpo(seg(t, 2.2 + i * .1, 3.0 + i * .1));
+      el.style.transform = `translateX(${(1 - p) * -60}px)`; el.style.opacity = p;
+    });
+    uzbMetaRows.forEach((el, i) => {
+      const p = outExpo(seg(t, 2.35 + i * .1, 3.15 + i * .1));
+      el.style.transform = `translateX(${(1 - p) * 60}px)`; el.style.opacity = p;
+    });
+
+    // top bar
+    const tb = outCubic(seg(t, 2.6, 3.3));
+    $("topbar").style.opacity = tb; $("topbar").style.transform = `translateY(${(1 - tb) * -20}px)`;
+
+    // info block
+    $("rule").style.transform = `scaleX(${outExpo(seg(t, 2.7, 3.6))})`;
+    slots.forEach((s, i) => {
+      if (s.colon) { const p = seg(t, 3.3, 3.5); s.colon.style.opacity = p * (t > 3.6 ? (Math.sin(t * 6.28) > -.6 ? 1 : .35) : 1); return; }
+      const p = outExpo(seg(t, 2.85 + i * .09, 3.85 + i * .09));
+      s.inner.parentElement.style.opacity = t >= 2.85 + i * .09 ? 1 : 0;
+      s.inner.style.transform = `translateY(${-p * s.n * 100 / (s.n + 1)}%)`;
+    });
+    whenRows.forEach((el, i) => {
+      const p = outExpo(seg(t, 3.1 + i * .12, 3.9 + i * .12));
+      el.style.opacity = p; el.style.clipPath = `inset(0 0 0 ${(1 - p) * 100}%)`;
+    });
+
+    // ticker
+    if (!trackHalf) trackHalf = trackEl.scrollWidth / 2;
+    const tk = outCubic(seg(t, 3.2, 3.9));
+    $("ticker").style.transform = `translateY(${(1 - tk) * 100}%)`;
+    trackEl.style.transform = `translateX(${-((t * 140) % trackHalf)}px)`;
+
+    // particles
+    const pa = seg(t, 1.8, 3);
+    parts.forEach((p) => {
+      let y = p.y - p.vy * t; y = ((y % H) + H) % H;
+      const x = p.x + Math.sin(t * .8 + p.ph) * p.sway;
+      p.el.style.transform = `translate(${x}px, ${y}px)`;
+      p.el.style.opacity = p.a * pa * (.6 + .4 * Math.sin(t * 3 + p.ph));
+    });
+
+    // grain
+    const f = Math.floor(t * 30), gr = mulberry32(f + 1);
+    gc.style.transform = `translate(${-gr() * 100}px, ${-gr() * 100}px)`;
+  }
+
+  window.DURATION = DURATION;
+  window.render = render;
+
+  function fit() {
+    const st = $("stage");
+    const s = Math.min(innerWidth / 1080, innerHeight / H);
+    st.style.transform = `scale(${s})`;
+    st.style.marginRight = `${1080 * s - 1080}px`;
+    st.style.marginBottom = `${H * s - H}px`;
+  }
+
+  document.fonts.ready.then(() => {
+    window.READY = true;
+    if (RENDER) { render(0); return; }
+    fit(); addEventListener("resize", fit);
+    const start = performance.now();
+    const loop = (now) => { render(((now - start) / 1000) % (DURATION + 1.5)); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  });
+})();
+</script>
+</body>
+</html>
