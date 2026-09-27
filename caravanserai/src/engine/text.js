@@ -65,3 +65,29 @@ export function conceal(tl, targets, at, { duration = 0.7, y = -14 } = {}) {
     at,
   );
 }
+
+// Inline SVG in stage coordinates (1920×1080).
+const NS = 'http://www.w3.org/2000/svg';
+export function svg(parent, attrs = {}) {
+  const s = document.createElementNS(NS, 'svg');
+  s.setAttribute('viewBox', '0 0 1920 1080');
+  s.setAttribute('width', '1920');
+  s.setAttribute('height', '1080');
+  Object.assign(s.style, { position: 'absolute', left: 0, top: 0, overflow: 'visible' });
+  for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+  parent.appendChild(s);
+  return s;
+}
+export function sv(parent, tag, attrs = {}) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e);
+  return e;
+}
+
+// Stroke draw-on for an SVG path/line/circle (seekable).
+export function draw(tl, e, at, { duration = 1.4, ease = 'power2.inOut', slack = 1.5 } = {}) {
+  const len = (e.getTotalLength?.() ?? 1000) * slack;
+  e.style.strokeDasharray = `${len} ${len}`;
+  tl.fromTo(e, { strokeDashoffset: len }, { strokeDashoffset: 0, duration, ease }, at);
+}

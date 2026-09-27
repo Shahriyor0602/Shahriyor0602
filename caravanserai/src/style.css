@@ -27,6 +27,7 @@
   --amber-soft: #f2c57c;
   --sand: #d9c7a3;
   --terracotta: #b5563a;
+  --terracotta-text: #d9785a; /* terracotta lifted for legible text on night */
   --ink: #efe9df;
   --ink-dim: rgba(239, 233, 223, 0.62);
   --serif: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
@@ -179,3 +180,34 @@ body.idle { cursor: none; }
 #presenter .ok { color: #9fd49a; }
 #presenter .note { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(217, 199, 163, 0.18); color: var(--sand); }
 #presenter .keys { margin-top: 8px; font-size: 12px; color: var(--ink-dim); }
+
+/* ---------- diagrams ---------- */
+.body {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.35;
+  color: var(--ink-dim);
+}
+.quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 46px;
+  line-height: 1.18;
+  font-variation-settings: 'opsz' 72;
+  color: var(--ink);
+}
+.stat {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 150px;
+  line-height: 0.95;
+  font-variation-settings: 'opsz' 144;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.03em;
+  color: var(--amber-soft);
+}
+.harm { color: var(--terracotta-text); }
+.amber { color: var(--amber); }
+svg text { font-family: var(--sans); }

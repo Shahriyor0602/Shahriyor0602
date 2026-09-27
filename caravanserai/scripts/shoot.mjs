@@ -41,9 +41,9 @@ const audit = () =>
     const k = 1920 / stage.width;
     const boxes = [];
     for (const e of document.querySelectorAll('#stage .scene > *')) {
-      if (!e.textContent.trim() || !shown(e)) continue;
+      if (e.tagName === 'svg' || !e.textContent.trim() || !shown(e)) continue;
       const words = [...e.querySelectorAll('.w')];
-      const parts = words.length ? words.filter(shown) : [e];
+      const parts = (words.length ? words : e.children.length ? [...e.children] : [e]).filter(shown);
       if (!parts.length) continue;
       // Measure the text itself, not the full-width container.
       let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -113,7 +113,10 @@ for (let k = 0; k < steps; k++) {
 // compare DOM opacity snapshots against the deep-linked states.
 const snap = () =>
   page.evaluate(() =>
-    [...document.querySelectorAll('#stage .scene *')].map((e) => Number(getComputedStyle(e).opacity).toFixed(2)).join(''),
+    [...document.querySelectorAll('#stage .scene *')]
+      .filter((e) => !e.closest('[data-ambient]'))
+      .map((e) => Number(getComputedStyle(e).opacity).toFixed(2))
+      .join(''),
   );
 const ref = [];
 for (let k = 0; k < steps; k++) {
