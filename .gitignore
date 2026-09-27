@@ -1,0 +1,5 @@
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Machine-specific browser path (cloud container Chromium)
+.playwright/cli.config.json
