@@ -39,6 +39,14 @@ The timer starts on the first press. Deep link to a step's end state with
   canvas and sampled into particles.
 - `report.pdf`: the source report. Every figure on screen comes from it.
 
+## Before the talk
+
+- **Scene 5 placeholders.** Fill each member's `major` and `lens` in
+  `src/content.js` and delete `placeholder: true`. Unfilled entries show a
+  dashed outline on screen.
+- **Map check.** The Uzbekistan and Aral Sea outlines (`src/engine/geo.js`)
+  are hand-simplified. Have a teammate from the region check them.
+
 ## Review captures
 
 ```bash
@@ -46,6 +54,10 @@ npm run build
 node scripts/shoot.mjs 0 --mid   # 1920×1080 PNGs of every step (+ mid-animation frames) in shots/
 node scripts/sheet.mjs 0         # contact sheet → shots/sheet-s0.png
 ```
+
+`node scripts/runthrough.mjs` presses through all 32 steps with real key
+presses (animations sped up), then all the way back, and reports any page
+errors.
 
 `shoot.mjs` also flags any text that sits outside the safe area or overlaps
 other text, prints each step's animation length, and checks that stepping back

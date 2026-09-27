@@ -481,3 +481,7 @@ export function inn(n) {
     delay: (u, v, kind) => (kind === 'light' ? 0.8 + Math.random() * 0.2 : Math.min(1, (1 - v) * 0.6 + Math.random() * 0.35)),
   });
 }
+
+// The film returns to its opening images for the close.
+export const ship2 = ship;
+export const inn2 = inn;

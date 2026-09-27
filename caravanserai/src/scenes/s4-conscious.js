@@ -69,7 +69,7 @@ export default {
     const testTitle = el(root, 'caption amber', C[3].title, { left: '128px', top: '200px' });
     const qs = [3, 4, 5, 6].map((s, i) => {
       const box = el(root, '', '', { left: '128px', top: `${280 + i * 140}px`, width: '720px' });
-      el(box, 'caption', `${i + 1} · ${C[s].question.dim}`, { position: 'relative', fontSize: '22px', color: 'var(--amber)' });
+      el(box, 'caption', `${i + 1} · ${C[s].question.dim}`, { position: 'relative', fontSize: '24px', color: 'var(--amber)' });
       el(box, 'lead', C[s].question.q, { position: 'relative', marginTop: '8px', fontSize: '40px', whiteSpace: 'nowrap' });
       return box;
     });

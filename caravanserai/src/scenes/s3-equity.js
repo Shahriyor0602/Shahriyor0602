@@ -104,7 +104,7 @@ export default {
       reveal(tl, c.word, t + 0.3 + i * 0.35, { duration: 1.2 });
       reveal(tl, c.plain, t + 0.8 + i * 0.35, { duration: 1.0, y: 10 });
     });
-    tl.to([cols[0].word, cols[1].word, cols[0].plain, cols[1].plain], { opacity: 0.32, duration: 1.2 }, t + 3.2);
+    tl.to([cols[0].word, cols[1].word, cols[0].plain, cols[1].plain], { opacity: 0.5, duration: 1.2 }, t + 3.2);
     tl.to(cols[2].word, { color: AMBER, duration: 1.2 }, t + 3.2);
     reveal(tl, pick, t + 3.6, { duration: 1, y: 10 });
     tl.addLabel('s0');

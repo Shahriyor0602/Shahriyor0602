@@ -252,7 +252,42 @@ export const scenes = [
       },
     ],
   },
-  { id: 'close', name: 'Our fields + close', start: 250, end: 280, steps: [] },
+  {
+    id: 'close',
+    name: 'Our fields + close',
+    start: 250,
+    end: 280,
+    steps: [
+      {
+        t: 10,
+        tag: 'Responsible management, in our fields',
+        // PLACEHOLDERS: fill `major` and `lens` for each member (report §5).
+        // Any entry with placeholder: true renders with a dashed outline so it
+        // cannot slip into the final talk unnoticed.
+        members: [
+          { name: 'Shakhriyor', major: 'Finance', lens: 'Social and environmental failures are future cash outflows — and a higher discount rate.' },
+          { name: 'Mirsaid', major: '[major]', lens: '[one-line lens]', placeholder: true },
+          { name: 'Mukaddas', major: 'Finance', lens: 'Capital allocation is never neutral: it decides which business models survive.' },
+          { name: 'Janat', major: '[major]', lens: '[one-line lens]', placeholder: true },
+          { name: 'Sogdiana', major: '[major]', lens: '[one-line lens]', placeholder: true },
+          { name: 'Buyandari', major: '[major]', lens: '[one-line lens]', placeholder: true },
+          { name: 'Nurmukhamed', major: '[major]', lens: '[one-line lens]', placeholder: true },
+        ],
+        note: 'Each of us read the paradigm through our own field. In finance: social and environmental failures are future cash outflows and a higher discount rate; and capital allocation is never neutral. [Other members: one line each.]',
+      },
+      {
+        t: 13,
+        close: ['Responsible management is not charity bolted onto business.', 'It is a business that has remembered why it exists.'],
+        note: 'We began with Captain LaRue, who settled first whom he was serving. The caravanserais of the Silk Road stood for centuries because every traveler was treated fairly — and came back. Responsible management is not charity bolted onto business. It is a business that has remembered why it exists.',
+      },
+      {
+        t: 7,
+        thanks: 'Thank you',
+        team: 'Team A-7 “Caravanserai”',
+        note: 'Thank you.',
+      },
+    ],
+  },
   // Decisions (team, 2026-09-27):
   // - Scene 3: Costco beat cut for time; the Aral Sea stays.
   // - Scene 4 SK chart: only reported figures are labelled (−3.1tn environmental,
