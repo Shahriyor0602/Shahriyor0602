@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Equity Road Motion Graphic</title>
+    <style>
+      @font-face { font-family: 'Inter'; font-weight: 400; src: url('vendor/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Inter'; font-weight: 500; src: url('vendor/fonts/inter-latin-500-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Inter'; font-weight: 600; src: url('vendor/fonts/inter-latin-600-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Inter'; font-weight: 700; src: url('vendor/fonts/inter-latin-700-normal.woff2') format('woff2'); }
+      :root {
+        --c-eng: #4f8cff;
+        --c-eff: #2fd39b;
+        --c-eq: #f2a93b;
+        --ink: #f4f6f8;
+        --ink-2: rgba(236, 240, 244, 0.78);
+        --u: 1px;
+      }
+      html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+      body { display: grid; place-items: center; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink); }
+      #stage { position: relative; overflow: hidden; background: #000; }
+      #stage canvas { display: block; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      .scrim-top { position: absolute; left: 0; top: 0; width: 70%; height: 42%;
+        background: radial-gradient(120% 100% at 0% 0%, rgba(6, 10, 16, 0.62) 0%, rgba(6, 10, 16, 0.25) 45%, rgba(6, 10, 16, 0) 75%); }
+      .chapter { position: absolute; left: calc(var(--u) * 96); top: calc(var(--u) * 84); max-width: calc(var(--u) * 720); }
+      .kicker { font-size: calc(var(--u) * 15); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2);
+        display: flex; align-items: center; gap: calc(var(--u) * 12); }
+      .kicker::before { content: ''; width: calc(var(--u) * 34); height: calc(var(--u) * 2); background: currentColor; opacity: 0.7; }
+      .chapter h1 { margin: calc(var(--u) * 14) 0 calc(var(--u) * 12); font-size: calc(var(--u) * 54); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05;
+        text-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 18) rgba(0, 0, 0, 0.35); }
+      .chapter p { margin: 0; font-size: calc(var(--u) * 23); line-height: 1.45; font-weight: 400; color: var(--ink-2); max-width: calc(var(--u) * 600);
+        text-shadow: 0 1px calc(var(--u) * 10) rgba(0, 0, 0, 0.45); }
+      .leaders { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+      .leader { fill: none; stroke-width: 1.6; }
+      .ring { fill: none; stroke-width: 1.4; }
+      .label { position: absolute; padding: calc(var(--u) * 10) calc(var(--u) * 16) calc(var(--u) * 11); border-radius: calc(var(--u) * 10);
+        background: rgba(10, 14, 20, 0.62); border: 1px solid rgba(255, 255, 255, 0.12); border-left: calc(var(--u) * 3) solid var(--c);
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); white-space: nowrap; opacity: 0; }
+      .l-title { font-size: calc(var(--u) * 21); font-weight: 600; letter-spacing: -0.005em; }
+      .l-sub { font-size: calc(var(--u) * 15); color: var(--ink-2); margin-top: calc(var(--u) * 2); }
+      .hud { position: absolute; left: calc(var(--u) * 96); bottom: calc(var(--u) * 76); width: calc(var(--u) * 380); padding: calc(var(--u) * 18) calc(var(--u) * 20);
+        border-radius: calc(var(--u) * 14); background: rgba(10, 14, 20, 0.55); border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: grid; gap: calc(var(--u) * 14); opacity: 0; }
+      .hud-head { display: flex; justify-content: space-between; align-items: baseline; font-size: calc(var(--u) * 15); }
+      .hud-name { font-weight: 600; }
+      .hud-name em { font-style: normal; font-weight: 400; color: var(--ink-2); }
+      .hud-val { font-variant-numeric: tabular-nums; color: var(--ink-2); font-size: calc(var(--u) * 14); }
+      .hud-bar { position: relative; height: calc(var(--u) * 5); margin-top: calc(var(--u) * 7); border-radius: 99px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+      .hud-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; }
+      .hud-bar.center::after { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: rgba(255, 255, 255, 0.5); }
+      .eng .hud-fill { background: var(--c-eng); }
+      .eff .hud-fill { background: var(--c-eff); }
+      .eq .hud-fill { background: var(--c-eq); }
+      .scrim-left { position: absolute; inset: 0; opacity: 0;
+        background: linear-gradient(90deg, rgba(4, 7, 12, 0.9) 0%, rgba(4, 7, 12, 0.72) 32%, rgba(4, 7, 12, 0.15) 62%, rgba(4, 7, 12, 0) 80%); }
+      .final { position: absolute; left: calc(var(--u) * 110); top: 50%; margin-top: calc(var(--u) * -170); max-width: calc(var(--u) * 760); opacity: 0; }
+      .final h2 { margin: calc(var(--u) * 18) 0 calc(var(--u) * 22); font-size: calc(var(--u) * 72); font-weight: 600; letter-spacing: -0.025em; line-height: 1.02; }
+      .final p { margin: 0; font-size: calc(var(--u) * 28); line-height: 1.5; color: var(--ink-2); }
+      .final b { font-weight: 600; }
+      .final b.eq { color: var(--c-eq); }
+      .final b.eff { color: var(--c-eff); }
+      .legend { display: flex; gap: calc(var(--u) * 28); margin-top: calc(var(--u) * 34); font-size: calc(var(--u) * 16); color: var(--ink-2); }
+      .legend span { display: inline-flex; align-items: center; gap: calc(var(--u) * 9); }
+      .legend i { width: calc(var(--u) * 10); height: calc(var(--u) * 10); border-radius: 50%; display: inline-block; }
+      .legend i.eng { background: var(--c-eng); }
+      .legend i.eff { background: var(--c-eff); }
+      .legend i.eq { background: var(--c-eq); }
+      .fade { position: absolute; inset: 0; background: #000; }
+      .no-captions .chapter, .no-captions .label, .no-captions .leaders, .no-captions .hud,
+      .no-captions .final, .no-captions .scrim-left, .no-captions .scrim-top { display: none; }
+      #hint { position: fixed; right: 16px; bottom: 14px; font: 12px/1.4 'Inter', system-ui, sans-serif; color: rgba(255, 255, 255, 0.7);
+        background: rgba(0, 0, 0, 0.45); padding: 6px 10px; border-radius: 8px; opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+      .record #hint { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <div id="hint">Space: play/pause · ← →: seek · R: restart · F: fullscreen</div>
+    <script>
+      if (location.search.includes('record')) document.documentElement.classList.add('record');
+    </script>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>

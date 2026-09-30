@@ -1,0 +1,19 @@
+{
+  "name": "equity-road-motion-graphic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cinematic 3D motion graphic: engine = effectiveness, steering = efficiency, road = equity.",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --minify --format=iife --target=es2020 --outfile=dist/bundle.js",
+    "render": "node render/record.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "@fontsource/inter": "^5.0.0",
+    "playwright": "1.56.1"
+  }
+}
