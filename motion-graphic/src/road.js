@@ -532,7 +532,7 @@ export function buildRoad(scene, path, carPoseAt) {
     const d = PLATE_W + DR() * gapLen(u);
     const v = HINGE_V + (d + (u - HINGE_U) * Math.sin(HINGE_SKEW)) / Math.cos(HINGE_SKEW);
     const o = path.world(u, v, -0.5 - DR() * 3.5);
-    addP(o, new THREE.Vector3((DR() - 0.5) * 0.5, 0.5 + DR() * 1.0, (DR() - 0.5) * 0.5), 23.4 + DR() * 10, 5 + DR() * 3, 1.2, 3 + DR() * 2, 0.16, 0);
+    addP(o, new THREE.Vector3((DR() - 0.5) * 0.5, 0.5 + DR() * 1.0, (DR() - 0.5) * 0.5), 23.4 + DR() * 10, 5 + DR() * 3, 1.0, 2.4 + DR() * 1.6, 0.085, 0);
   }
   for (let k = 0; k < 70; k++) {
     const u = (DR() - 0.5) * 2 * HALF;
